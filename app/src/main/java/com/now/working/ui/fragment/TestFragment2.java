@@ -15,9 +15,18 @@ import com.now.working.ui.base.BaseFragment;
 
 public class TestFragment2 extends BaseFragment {
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_main_2,container,false);
+    protected int getContentViewLayoutID() {
+        return R.layout.fragment_main_2;
+    }
+
+    @Override
+    protected void initView() {
+
+    }
+
+    @Override
+    protected void bindData() {
+
     }
 }

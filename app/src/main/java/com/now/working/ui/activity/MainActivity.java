@@ -10,7 +10,7 @@ import android.support.v4.view.ViewPager;
 import com.now.working.R;
 import com.now.working.ui.adapter.ViewPagerAdapter;
 import com.now.working.ui.base.BaseActivity;
-import com.now.working.ui.fragment.TestFragment;
+import com.now.working.ui.fragment.NewsFragment;
 import com.now.working.ui.fragment.TestFragment2;
 
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initViewPager() {
-        mTabList.add(new TestFragment());
+        mTabList.add(new NewsFragment());
         mTabList.add(new TestFragment2());
 
         mViewPager = (ViewPager) findViewById(R.id.main_viewPager);

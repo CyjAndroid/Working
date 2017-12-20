@@ -1,6 +1,7 @@
 package com.now.working.ui.holder;
 
 import android.support.v7.widget.RecyclerView;
+import android.view.TextureView;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.VideoView;
@@ -13,7 +14,7 @@ import com.now.working.R;
 
 public class NewsItemHolder3 extends NewsItemHolder {
 
-    public VideoView newsVideo;
+    public TextureView newsVideo;
 
     public NewsItemHolder3(View itemView) {
         super(itemView);

@@ -1,17 +1,15 @@
 package com.now.working.ui.adapter;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.now.working.R;
 import com.now.working.WorkApplication;
 import com.now.working.data.bean.News;
+import com.now.working.listener.NewsTextureListener;
 import com.now.working.ui.holder.NewsItemHolder;
 import com.now.working.ui.holder.NewsItemHolder1;
 import com.now.working.ui.holder.NewsItemHolder2;
@@ -26,6 +24,7 @@ import java.util.List;
  */
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<NewsItemHolder> {
+    private static final String TAG = RecyclerViewAdapter.class.getSimpleName();
 
     private static final int TYPE_ONLY_NEWS = 0;
     private static final int TYPE_NEWS_AND_IMAGE = 1;
@@ -64,11 +63,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<NewsItemHolder> {
         } else if (TYPE_NEWS_AND_IMAGE == viewType) {
             NewsItemHolder2 holder2 = (NewsItemHolder2) holder;
             holder2.newsTitle.setText(news.getContent());
-            ImageUtils.loadImage(holder2.newsImage,news.getImgUrl());
+            ImageUtils.loadImage(holder2.newsImage, news.getImgUrl());
         } else {
             NewsItemHolder3 holder3 = (NewsItemHolder3) holder;
-            holder3.newsVideo.setVideoPath(Uri.parse(news.getVideoUrl()).toString());
-            holder3.newsVideo.start();
+            holder3.newsVideo.setSurfaceTextureListener(new NewsTextureListener(news));
         }
     }
 
@@ -87,7 +85,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<NewsItemHolder> {
             gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(int position) {
-                    return 6;
+                    if (position % 3 == 2) {
+                        return 6;
+                    } else {
+                        return 3;
+                    }
                 }
             });
         }
@@ -95,15 +97,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<NewsItemHolder> {
 
     @Override
     public int getItemViewType(int position) {
-        int p = position % 3;
-        if (p == 0) {
-            return TYPE_ONLY_NEWS;
-        } else if (p == 1) {
-            return TYPE_NEWS_AND_IMAGE;
-        } else {
-            return TYPE_ONLY_VIDEO;
-        }
+        return position % 3;
     }
+
 }
 
 

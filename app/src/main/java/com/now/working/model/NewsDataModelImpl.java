@@ -1,7 +1,10 @@
 package com.now.working.model;
 
+import com.now.working.data.DBManager;
 import com.now.working.data.bean.News;
 import com.now.working.listener.OnNewsDataLoadListener;
+import com.now.working.thread.SafeExecutor;
+import com.now.working.thread.SafeThreadFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,9 +14,37 @@ import java.util.List;
  */
 
 public class NewsDataModelImpl implements NewsDataModel {
+    private static final String SAVE_NEWS = "save_news";
+    private static final String LOAD_NEWS = "load_news";
+    private SafeExecutor saveDataExecutor;
+    private SafeExecutor loadDataExecutor;
+
+    public NewsDataModelImpl() {
+        initThread();
+    }
+
+    private void initThread() {
+        saveDataExecutor = new SafeExecutor(SAVE_NEWS);
+        loadDataExecutor = new SafeExecutor(LOAD_NEWS);
+    }
 
     @Override
-    public void loadNewsData(OnNewsDataLoadListener listener) {
+    public List<News> loadDBNews() {
+        return DBManager.getInstence().queryAllNews();
+    }
+
+    @Override
+    public void loadNewsData(final OnNewsDataLoadListener listener) {
+        loadDataExecutor.asyncExecute(new Runnable() {
+            @Override
+            public void run() {
+                listener.completed(load());
+            }
+        });
+    }
+
+
+    private List<News> load() {
         List<News> list = new ArrayList<>();
         News news1 = new News();
         news1.setContent("This is one news");
@@ -33,6 +64,16 @@ public class NewsDataModelImpl implements NewsDataModel {
         list.add(news2);
         list.add(news3);
 
-        listener.completed(list);
+        return list;
+    }
+
+    @Override
+    public void saveNews(final List<News> list) {
+        saveDataExecutor.asyncExecute(new Runnable() {
+            @Override
+            public void run() {
+                DBManager.getInstence().insertNews(list);
+            }
+        });
     }
 }

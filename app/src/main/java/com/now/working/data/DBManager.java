@@ -6,6 +6,8 @@ import com.now.working.data.db.DaoMaster;
 import com.now.working.data.db.DaoSession;
 import com.now.working.data.db.NewsDao;
 
+import java.util.List;
+
 /**
  * Created by Cyj on 17/12/21.
  */
@@ -42,7 +44,12 @@ public class DBManager {
 
     public void insertNews(News news) {
         NewsDao dao = getNewsDao();
-        dao.insert(news);
+        dao.insertOrReplace(news);
+    }
+
+    public void insertNews(List<News> news) {
+        NewsDao dao = getNewsDao();
+        dao.insertOrReplaceInTx(news);
     }
 
     public void deleteNewsById(Long id) {
@@ -61,6 +68,11 @@ public class DBManager {
         getNewsDao().deleteAll();
     }
 
-    public void queryBySq(String sq){
+    public List<News> queryRaw(String where, String... selectionArg){
+        return getNewsDao().queryRaw(where,selectionArg);
+    }
+
+    public List<News> queryAllNews(){
+        return  getNewsDao().loadAll();
     }
 }

@@ -27,6 +27,8 @@ public class NewsFragment extends BaseFragment implements NewsDataView {
     private static final int RAW_COUNT = 6;
 
     private RecyclerView mRecyclerView;
+    private List<News> data = new ArrayList<>();
+    private RecyclerViewAdapter adapter = null;
 
     @Override
     protected int getContentViewLayoutID() {
@@ -44,11 +46,17 @@ public class NewsFragment extends BaseFragment implements NewsDataView {
 
         NewsPresenter newsPresenter = new NewsPresenter(this);
         newsPresenter.loadData();
+
     }
 
     @Override
     public void notifyNewsData(List<News> list) {
-        mRecyclerView.setAdapter(new RecyclerViewAdapter(list));
+        data = list;
+        if (adapter == null) {
+            adapter = new RecyclerViewAdapter(data);
+            mRecyclerView.setAdapter(adapter);
+        }
 
+        adapter.notifyDataSetChanged();
     }
 }

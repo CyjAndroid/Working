@@ -66,7 +66,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<NewsItemHolder> {
             ImageUtils.loadImage(holder2.newsImage, news.getImgUrl());
         } else {
             NewsItemHolder3 holder3 = (NewsItemHolder3) holder;
-            holder3.newsVideo.setSurfaceTextureListener(new NewsTextureListener(news));
+            holder3.newsVideo.setUp(news.getVideoUrl(),null);
         }
     }
 

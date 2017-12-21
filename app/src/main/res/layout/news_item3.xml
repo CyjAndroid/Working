@@ -6,7 +6,7 @@
     android:layout_height="200dp"
     android:orientation="vertical">
 
-    <TextureView
+    <com.xiao.nicevideoplayer.NiceVideoPlayer
         android:id="@+id/news_video"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

@@ -28,4 +28,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:design:26.0.0-alpha1'
     compile 'com.github.bumptech.glide:glide:3.5.2'
+    compile 'com.github.xiaoyanger0825:NiceVieoPlayer:v2.2'
 }

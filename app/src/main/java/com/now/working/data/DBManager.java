@@ -8,6 +8,10 @@ import com.now.working.data.db.NewsDao;
 
 import java.util.List;
 
+import rx.Observable;
+import rx.functions.Action1;
+import rx.functions.Func1;
+
 /**
  * Created by Cyj on 17/12/21.
  */
@@ -53,26 +57,33 @@ public class DBManager {
     }
 
     public void deleteNewsById(Long id) {
-        News news = queryNewsById(id);
-        if (news != null) {
-            getNewsDao().deleteByKey(id);
-        }
+        queryNewsById(id).filter(new Func1<News, Boolean>() {
+            @Override
+            public Boolean call(News news) {
+                return news != null;
+            }
+        }).subscribe(new Action1<News>() {
+            @Override
+            public void call(News news) {
+                getNewsDao().deleteByKey(news.getId());
+            }
+        });
     }
 
-    public News queryNewsById(Long id) {
-        return getNewsDao().queryBuilder().
-                where(NewsDao.Properties.Id.eq(id)).build().unique();
+    public Observable<News> queryNewsById(Long id) {
+        return Observable.just(getNewsDao().queryBuilder().
+                where(NewsDao.Properties.Id.eq(id)).build().unique());
     }
 
     public void deleteAllNews() {
         getNewsDao().deleteAll();
     }
 
-    public List<News> queryRaw(String where, String... selectionArg){
-        return getNewsDao().queryRaw(where,selectionArg);
+    public List<News> queryRaw(String where, String... selectionArg) {
+        return getNewsDao().queryRaw(where, selectionArg);
     }
 
-    public List<News> queryAllNews(){
-        return  getNewsDao().loadAll();
+    public List<News> queryAllNews() {
+        return getNewsDao().loadAll();
     }
 }

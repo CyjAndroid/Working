@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+
 public class MainActivity extends BaseActivity {
 
     private FragmentManager mFragmentManager = getSupportFragmentManager();
@@ -30,6 +31,7 @@ public class MainActivity extends BaseActivity {
 
         initViewPager();
         initTabLayout();
+
     }
 
     private void initTabLayout() {

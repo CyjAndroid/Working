@@ -6,7 +6,9 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
@@ -23,13 +25,16 @@ public class SafeExecutor {
     protected SafeExecutor() { }
 
     public SafeExecutor(String moduleName) {
-        if (mServiceMap.containsKey(moduleName)) {
-            mExeService = mServiceMap.get(moduleName);
-        } else {
-            ThreadFactory threadFactory = new SafeThreadFactory(moduleName + "Thread");
-            mExeService = Executors.newSingleThreadExecutor(threadFactory);
-            mServiceMap.put(moduleName, mExeService);
-        }
+//        if (mServiceMap.containsKey(moduleName)) {
+//            mExeService = mServiceMap.get(moduleName);
+//        } else {
+//            ThreadFactory threadFactory = new SafeThreadFactory(moduleName + "Thread");
+//            mExeService = Executors.newSingleThreadExecutor(threadFactory);
+//            mServiceMap.put(moduleName, mExeService);
+//        }
+        ThreadFactory threadFactory = new SafeThreadFactory();
+        mExeService = Executors.newSingleThreadExecutor(threadFactory);
+
     }
 
     /**
@@ -60,5 +65,6 @@ public class SafeExecutor {
     public void asyncExecute(final Runnable runnable) {
         mExeService.execute(runnable);
     }
+
 
 }

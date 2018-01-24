@@ -10,18 +10,16 @@ public class SafeThreadFactory implements ThreadFactory {
 
     private Thread.UncaughtExceptionHandler mExceptionHandler;
 
-    public SafeThreadFactory(String threadName) {
-        mThreadName = threadName;
+    public SafeThreadFactory() {
     }
 
-    public SafeThreadFactory(String threadName, Thread.UncaughtExceptionHandler exceptionHandler) {
-        this(threadName);
+    public SafeThreadFactory(Thread.UncaughtExceptionHandler exceptionHandler) {
         mExceptionHandler = exceptionHandler;
     }
 
     @Override
     public Thread newThread(Runnable runnable) {
-        Thread thread = new Thread(runnable, mThreadName);
+        Thread thread = new Thread(runnable);
         if(mExceptionHandler == null) {
             mExceptionHandler = new SafeExceptionHandler();
         }

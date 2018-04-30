@@ -1,12 +1,15 @@
 package com.now.working.ui.activity;
 
 
+import android.content.ComponentName;
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 
+import com.now.plugin.PluginHelper;
 import com.now.working.R;
 import com.now.working.ui.adapter.ViewPagerAdapter;
 import com.now.working.ui.base.BaseActivity;
@@ -28,6 +31,11 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Intent intent = new Intent();
+        intent.setComponent(new ComponentName("com.now.plugin.activity",
+                "com.now.plugin.activity.PluginActivity"));
+        startActivity(intent);
 
         initViewPager();
         initTabLayout();

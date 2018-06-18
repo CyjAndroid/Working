@@ -1,0 +1,21 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.cyj.libhttp" >
+    <application
+        android:allowBackup="true"
+        tools:replace="label"
+        android:label="@string/net_app_name"
+        android:icon="@mipmap/net_ic_launcher"
+        android:supportsRtl="true"
+        android:theme="@style/net_AppTheme">
+        <activity
+            android:name=".Test"
+            android:label="@string/net_main_test_text">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+    </application>
+</manifest>

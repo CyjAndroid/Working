@@ -32,10 +32,10 @@ public class MainActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Intent intent = new Intent();
-        intent.setComponent(new ComponentName("com.now.plugin.activity",
-                "com.now.plugin.activity.PluginActivity"));
-        startActivity(intent);
+//        Intent intent = new Intent();
+//        intent.setComponent(new ComponentName("com.now.plugin.activity",
+//                "com.now.plugin.activity.PluginActivity"));
+//        startActivity(intent);
 
         initViewPager();
         initTabLayout();

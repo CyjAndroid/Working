@@ -1,6 +1,10 @@
 package com.now.working;
 
 import android.app.Application;
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 
 /**
  * Created by Cyj on 17/12/17.

@@ -6,7 +6,7 @@ android {
     buildToolsVersion "26.0.2"
     defaultConfig {
         applicationId "com.now.working"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -48,5 +48,11 @@ dependencies {
     compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
 
     compile project(path: ':plugin')
+
+    if(isBuildModule.toBoolean()){
+
+    }else {
+        compile project(':libhttp')
+    }
 
 }

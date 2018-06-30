@@ -9,7 +9,7 @@
         android:supportsRtl="true"
         android:theme="@style/net_AppTheme">
         <activity
-            android:name=".Test"
+            android:name=".TestActivity"
             android:label="@string/net_main_test_text">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

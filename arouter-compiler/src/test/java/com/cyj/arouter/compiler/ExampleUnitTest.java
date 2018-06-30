@@ -1,4 +1,4 @@
-package com.now.working;
+package com.cyj.arouter.compiler;
 
 import org.junit.Test;
 

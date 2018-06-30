@@ -9,6 +9,10 @@ import android.net.Uri;
 /**
  * Created by Cyj on 17/12/17.
  */
+import com.android.annotation.DispatcherModules;
+import com.android.cyj.router.RouterConfig;
+
+@DispatcherModules({"app"})
 
 public class WorkApplication extends Application {
     private static String TAG = WorkApplication.class.getSimpleName();
@@ -18,6 +22,8 @@ public class WorkApplication extends Application {
     public void onCreate() {
         super.onCreate();
         mWorkApplication = this;
+
+        RouterConfig.getInstance().init(this);
     }
 
     public static WorkApplication getApplication() {

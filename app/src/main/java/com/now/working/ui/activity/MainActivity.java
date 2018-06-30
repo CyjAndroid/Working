@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 
+import com.android.cyj.router.RouterConfig;
 import com.now.plugin.PluginHelper;
 import com.now.working.R;
 import com.now.working.ui.adapter.ViewPagerAdapter;
@@ -16,9 +17,11 @@ import com.now.working.ui.base.BaseActivity;
 import com.now.working.ui.fragment.NewsFragment;
 import com.now.working.ui.fragment.TestFragment2;
 
+import java.lang.annotation.Retention;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.android.annotation.Dispatcher;
 
 
 public class MainActivity extends BaseActivity {
@@ -31,6 +34,8 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+//        RouterConfig.open("cyj://stub");
 
 //        Intent intent = new Intent();
 //        intent.setComponent(new ComponentName("com.now.plugin.activity",

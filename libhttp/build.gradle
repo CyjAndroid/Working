@@ -47,6 +47,6 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
-    compile project(":annotation")
-
+    annotationProcessor project(':compiler')
+    compile project(":router")
 }

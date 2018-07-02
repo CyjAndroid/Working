@@ -35,12 +35,7 @@ public class MainActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        RouterConfig.open("cyj://stub");
-
-//        Intent intent = new Intent();
-//        intent.setComponent(new ComponentName("com.now.plugin.activity",
-//                "com.now.plugin.activity.PluginActivity"));
-//        startActivity(intent);
+        RouterConfig.open("cyj://test");
 
         initViewPager();
         initTabLayout();

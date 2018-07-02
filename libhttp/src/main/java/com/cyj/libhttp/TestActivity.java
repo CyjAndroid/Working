@@ -8,7 +8,7 @@ import android.os.Bundle;
  */
 import com.android.annotation.Dispatcher;
 
-@Dispatcher("easyrouter://test")
+
 public class TestActivity extends Activity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {

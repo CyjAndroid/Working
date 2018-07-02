@@ -54,9 +54,8 @@ dependencies {
     compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
 
     compile project(path: ':plugin')
-    compile project(":annotation")
-    compile project(":router")
     annotationProcessor project(':compiler')
+    compile project(":router")
 
     if(isBuildModule.toBoolean()){
 

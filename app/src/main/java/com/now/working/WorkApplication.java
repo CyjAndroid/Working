@@ -12,7 +12,7 @@ import android.net.Uri;
 import com.android.annotation.DispatcherModules;
 import com.android.cyj.router.RouterConfig;
 
-@DispatcherModules({"app"})
+@DispatcherModules({"app","plugin"})
 
 public class WorkApplication extends Application {
     private static String TAG = WorkApplication.class.getSimpleName();

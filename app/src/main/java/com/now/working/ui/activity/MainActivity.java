@@ -29,7 +29,8 @@ public class MainActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Router.getInstance().build("cyj://test")
+        Router.getInstance()
+                .build("cyj://test")
                 .withString("name", "cyj")
                 .withInt("age", 18)
                 .navigation();

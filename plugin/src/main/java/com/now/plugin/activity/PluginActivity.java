@@ -4,19 +4,26 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.android.annotation.AutoAssign;
 import com.android.annotation.Dispatcher;
-import com.now.plugin.R;
+import com.android.cyj.router.Router;
 
 /**
  * Created by Cyj on 18/1/30.
  */
 @Dispatcher("cyj://test")
 public class PluginActivity extends Activity {
+    @AutoAssign(name = "name")
+    String name;
+    @AutoAssign(name = "age")
+    int age;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Router.getInstance().inject(this);
         TextView view = new TextView(this);
-        view.setText("this is plugin");
+        view.setText("this is plugin " + name + "----" + age);
         setContentView(view);
     }
 }

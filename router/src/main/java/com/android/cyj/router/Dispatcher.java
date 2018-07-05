@@ -5,11 +5,13 @@ import android.app.Application;
 import android.app.Fragment;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.text.TextUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by chengyijun on 18/6/30.
@@ -73,8 +75,9 @@ public class Dispatcher {
         return null;
     }
 
-    public void open(Application mApplication, String url) {
+    public void open(Application mApplication, String url,Bundle bundle) {
         Intent intent = new Intent(mApplication, getTargetClass(url));
+        intent.putExtras(bundle);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mApplication.startActivity(intent);
     }

@@ -1,27 +1,21 @@
 package com.now.working.ui.activity;
 
 
-import android.content.ComponentName;
-import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 
-import com.android.cyj.router.RouterConfig;
-import com.now.plugin.PluginHelper;
+import com.android.cyj.router.Router;
 import com.now.working.R;
 import com.now.working.ui.adapter.ViewPagerAdapter;
 import com.now.working.ui.base.BaseActivity;
 import com.now.working.ui.fragment.NewsFragment;
 import com.now.working.ui.fragment.TestFragment2;
 
-import java.lang.annotation.Retention;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.android.annotation.Dispatcher;
 
 
 public class MainActivity extends BaseActivity {
@@ -35,7 +29,10 @@ public class MainActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        RouterConfig.open("cyj://test");
+        Router.getInstance().build("cyj://test")
+                .withString("name", "cyj")
+                .withInt("age", 18)
+                .navigation();
 
         initViewPager();
         initTabLayout();

@@ -1,16 +1,12 @@
 package com.now.working;
 
 import android.app.Application;
-import android.content.ComponentName;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 
 /**
  * Created by Cyj on 17/12/17.
  */
 import com.android.annotation.DispatcherModules;
-import com.android.cyj.router.RouterConfig;
+import com.android.cyj.router.Router;
 
 @DispatcherModules({"app","plugin"})
 
@@ -23,7 +19,7 @@ public class WorkApplication extends Application {
         super.onCreate();
         mWorkApplication = this;
 
-        RouterConfig.getInstance().init(this);
+        Router.getInstance().init(this);
     }
 
     public static WorkApplication getApplication() {

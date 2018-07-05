@@ -1,33 +1,31 @@
 package com.android.cyj.router;
 
 import android.app.Application;
-import android.content.Intent;
 import android.text.TextUtils;
-
-import java.util.List;
 
 /**
  * Created by liuzhao on 2017/9/29.
  * EasyRouter的配置类
  */
 
-public class RouterConfig {
-    private static volatile RouterConfig mRouterConfig;
+public class Router {
+    private static String injectSuffix = "_AutoAssign";
+    private static volatile Router mRouter;
     public static Application mApplication;
     public static boolean isInited;
 
-    private RouterConfig() {
+    private Router() {
     }
 
-    public static RouterConfig getInstance() {
-        if (mRouterConfig == null) {
-            synchronized (RouterConfig.class) {
-                if (mRouterConfig == null) {
-                    mRouterConfig = new RouterConfig();
+    public static Router getInstance() {
+        if (mRouter == null) {
+            synchronized (Router.class) {
+                if (mRouter == null) {
+                    mRouter = new Router();
                 }
             }
         }
-        return mRouterConfig;
+        return mRouter;
     }
 
     public void init(Application application) {
@@ -54,16 +52,21 @@ public class RouterConfig {
         }
     }
 
-
-//    public RouterConfig setScheme(String scheme) {
-//        Dispatcher.getActivityDispatcher().setScheme(scheme);
-//        return this;
-//    }
-
-    public static void open(String url){
-        if(!TextUtils.isEmpty(url)){
-            Dispatcher.getActivityDispatcher().open(mApplication,url);
+    public void inject(Object object) {
+        if (object == null) {
+            return;
+        }
+        String objectCName = object.getClass().getName();
+        String injectCName = objectCName + injectSuffix;
+        try {
+            Class.forName(injectCName).getMethod("autoAssign", Object.class).invoke(null, object);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
+    public RouterBuild build(String url) {
+        RouterBuild build = new RouterBuild(mApplication, url);
+        return build;
+    }
 }

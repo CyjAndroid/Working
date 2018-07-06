@@ -10,7 +10,7 @@ public class Constant {
     public static final String AutoCreateInterceptorPrefix = "AutoCreateModuleInterceptor_";
     public static final String AutoCreateActivityMapMethod = ".initRouterTable()";
     public static final String DISPATCHER_PACKAGE = "com.android.cyj.router";
-    public static final String AutoCreateInterceptorPackage = "com.android.easyrouter.interceptor";
+    public static final String AutoCreateInterceptorPackage = "com.android.cyj.interceptor";
 
     private static final String LANG = "java.lang";
     public static final String BYTE = LANG + ".Byte";

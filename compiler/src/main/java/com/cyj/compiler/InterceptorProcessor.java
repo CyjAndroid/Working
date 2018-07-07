@@ -38,7 +38,6 @@ import static com.squareup.javapoet.JavaFile.builder;
 @AutoService(Processor.class)
 public class InterceptorProcessor extends AbstractProcessor {
 
-    private Elements elementUtils;
     private Messager mMessager;
     private String moduleName = "";
     private Filer mFiler;
@@ -47,7 +46,6 @@ public class InterceptorProcessor extends AbstractProcessor {
     @Override
     public synchronized void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
-        elementUtils = processingEnv.getElementUtils();
         mMessager = processingEnv.getMessager();
         mFiler = processingEnv.getFiler();
         Map<String, String> options = processingEnv.getOptions();

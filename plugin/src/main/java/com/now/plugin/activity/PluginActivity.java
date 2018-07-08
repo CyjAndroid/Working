@@ -2,6 +2,7 @@ package com.now.plugin.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.widget.TextView;
 
 import com.android.annotation.AutoAssign;
@@ -17,13 +18,15 @@ public class PluginActivity extends Activity {
     String name;
     @AutoAssign(name = "age")
     int age;
+    @AutoAssign(name = "obj")
+    Parcelable obj;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Router.getInstance().inject(this);
         TextView view = new TextView(this);
-        view.setText("this is plugin " + name + "----" + age);
+        view.setText("this is plugin " + name + "----" + age+"----"+obj.toString());
         setContentView(view);
     }
 }

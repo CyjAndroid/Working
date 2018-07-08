@@ -3,9 +3,11 @@ package com.android.cyj.router;
 import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +42,7 @@ public class RouterBuild {
         return mUrl;
     }
 
-    public Bundle getBundle(){
+    public Bundle getBundle() {
         return mBundle;
     }
 
@@ -61,6 +63,16 @@ public class RouterBuild {
 
     public RouterBuild withFloat(@Nullable String key, float value) {
         mBundle.putFloat(key, value);
+        return this;
+    }
+
+    public RouterBuild withSerializable(@Nullable String key, Serializable serializable) {
+        mBundle.putSerializable(key, serializable);
+        return this;
+    }
+
+    public RouterBuild withParcelable(@Nullable String key, Parcelable parcelable) {
+        mBundle.putParcelable(key, parcelable);
         return this;
     }
 

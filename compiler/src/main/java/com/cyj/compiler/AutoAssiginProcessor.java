@@ -136,7 +136,10 @@ public class AutoAssiginProcessor extends AbstractProcessor {
             statement += (isActivity ? ("getDoubleExtra($S, " + originalValue + ")") : ("getDouble($S)"));
         } else if (type == ParamTypeKinds.STRING.ordinal()) {
             statement += (isActivity ? ("getStringExtra($S)") : ("getString($S)"));
+        } else if (type == ParamTypeKinds.PARCELABLE.ordinal()) {
+            statement += (isActivity ? ("getParcelableExtra($S)") : ("getParcelable($S)"));
         }
+
         return statement;
     }
 

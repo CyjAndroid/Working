@@ -60,6 +60,8 @@ public class ParamTypeUtils {
                 return ParamTypeKinds.BOOLEAN.ordinal();
             case STRING:
                 return ParamTypeKinds.STRING.ordinal();
+            case PARCELABLE:
+                return ParamTypeKinds.PARCELABLE.ordinal();
             default:
                 return ParamTypeKinds.OBJECT.ordinal();
         }

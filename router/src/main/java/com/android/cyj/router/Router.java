@@ -3,6 +3,8 @@ package com.android.cyj.router;
 import android.app.Application;
 import android.text.TextUtils;
 
+import java.util.List;
+
 /**
  * Created by liuzhao on 2017/9/29.
  * EasyRouter的配置类
@@ -39,11 +41,11 @@ public class Router {
                 }
                 for (String string : Dispatcher.mModuleNames) {
                     // deal interceptor
-//                    Class moduleInterceptor = Class.forName("com.android.cyj.router.AutoCreateModuleInterceptor_" + string);
-//                    if (moduleInterceptor != null) {
-//                        List list = (List) moduleInterceptor.getMethod("initModuleInterceptor").invoke(null);
-//                        ActivityDispatcher.getActivityDispatcher().initInterceptors(list);
-//                    }
+                    Class moduleInterceptor = Class.forName("com.android.cyj.router.AutoCreateModuleInterceptor_" + string);
+                    if (moduleInterceptor != null) {
+                        List list = (List) moduleInterceptor.getMethod("initModuleInterceptor").invoke(null);
+                        Dispatcher.getActivityDispatcher().initInterceptors(list);
+                    }
                 }
                 isInited = true;
             } catch (Exception e) {

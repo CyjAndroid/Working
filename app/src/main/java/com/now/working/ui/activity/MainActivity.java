@@ -6,8 +6,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.widget.Toast;
 
+import com.android.cyj.router.IInterceptor;
 import com.android.cyj.router.Router;
+import com.android.cyj.router.RouterBuild;
 import com.now.working.R;
 import com.now.working.ui.adapter.ViewPagerAdapter;
 import com.now.working.ui.base.BaseActivity;
@@ -33,6 +36,18 @@ public class MainActivity extends BaseActivity {
                 .build("cyj://test")
                 .withString("name", "cyj")
                 .withInt("age", 18)
+                .addInterceptor(new IInterceptor() {
+                    @Override
+                    public boolean intercept(RouterBuild build) {
+                        return false;
+                    }
+
+                    @Override
+                    public void onIntercepted(RouterBuild build) {
+                        Toast.makeText(MainActivity.this,"拦截了",Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                })
                 .navigation();
 
         initViewPager();

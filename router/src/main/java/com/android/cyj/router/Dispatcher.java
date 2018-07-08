@@ -1,8 +1,6 @@
 package com.android.cyj.router;
 
-import android.app.Activity;
 import android.app.Application;
-import android.app.Fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,7 +9,6 @@ import android.text.TextUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by chengyijun on 18/6/30.
@@ -21,6 +18,7 @@ public class Dispatcher {
     private static Dispatcher mActivityDispatcher;
     private HashMap<String, Class> mRealActivityMaps = new HashMap<String, Class>();// store the mapping of strings and class
     public static List<String> mModuleNames = new ArrayList<String>();// store module names
+    private static List<IInterceptor> mRealInterceptors = new ArrayList<IInterceptor>();// store the interceptor for UI Action
 
 
     public static Dispatcher getActivityDispatcher() {
@@ -49,6 +47,14 @@ public class Dispatcher {
         }
     }
 
+    public void initInterceptors(List<IInterceptor> interceptors) {
+        if (interceptors == null) {
+            return;
+        }
+        mRealInterceptors.addAll(interceptors);
+    }
+
+
     public Class getTargetClass(String targetUrl) {
         Uri targetUri = Uri.parse(targetUrl);
         String targetHost = targetUri.getHost();
@@ -75,9 +81,18 @@ public class Dispatcher {
         return null;
     }
 
-    public void open(Application mApplication, String url,Bundle bundle) {
+    public void open(Application mApplication, String url, RouterBuild build) {
+
+        List<IInterceptor> interceptors = new ArrayList<IInterceptor>();
+        if (build.mInterceptors != null && !build.mInterceptors.isEmpty()) {
+            interceptors = build.mInterceptors;
+            for (IInterceptor iInterceptor : interceptors) {
+                iInterceptor.onIntercepted(build);
+            }
+        }
+
         Intent intent = new Intent(mApplication, getTargetClass(url));
-        intent.putExtras(bundle);
+        intent.putExtras(build.getBundle());
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mApplication.startActivity(intent);
     }

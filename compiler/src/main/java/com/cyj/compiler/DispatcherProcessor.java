@@ -2,6 +2,7 @@ package com.cyj.compiler;
 
 import com.android.annotation.Dispatcher;
 import com.android.annotation.DispatcherModules;
+import com.android.annotation.ModuleService;
 import com.google.auto.service.AutoService;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
@@ -61,6 +62,7 @@ public class DispatcherProcessor extends AbstractProcessor {
         Set<String> ret = new HashSet<>();
         ret.add(Dispatcher.class.getCanonicalName());
         ret.add(DispatcherModules.class.getCanonicalName());
+        ret.add(ModuleService.class.getCanonicalName());
         return ret;
     }
 
@@ -75,13 +77,14 @@ public class DispatcherProcessor extends AbstractProcessor {
         Set<? extends Element> elementDispatchers = roundEnv.getElementsAnnotatedWith(Dispatcher.class);
         String[] moduleNames = null;
         Set<? extends Element> modulesList = roundEnv.getElementsAnnotatedWith(DispatcherModules.class);
+        Set<? extends Element> elementModuleServices = roundEnv.getElementsAnnotatedWith(ModuleService.class);
         if (modulesList != null && modulesList.size() > 0) {
             Element modules = modulesList.iterator().next();
             moduleNames = modules.getAnnotation(DispatcherModules.class).value();
         }
 
         try {
-            TypeSpec type = getRouterTableInitializer(elementDispatchers);
+            TypeSpec type = getRouterTableInitializer(elementDispatchers,elementModuleServices);
             if (type != null) {
                 builder(Constant.DISPATCHER_PACKAGE, type).build().writeTo(mFiler);
             }
@@ -108,27 +111,27 @@ public class DispatcherProcessor extends AbstractProcessor {
                     Constant.AutoCreateActivityMapPrefix + module + "())");
         }
 
-//        MethodSpec.Builder initModuleServiceMethod = MethodSpec.methodBuilder("initModuleService")
-//                .addModifiers(Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC);
-//        for (String module : moduleNames) {
-//            initModuleServiceMethod.addStatement(Constant.AutoCreateActivityMapPrefix + module + ".initModuleService()");
-//        }
+        MethodSpec.Builder initModuleServiceMethod = MethodSpec.methodBuilder("initModuleService")
+                .addModifiers(Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC);
+        for (String module : moduleNames) {
+            initModuleServiceMethod.addStatement(Constant.AutoCreateActivityMapPrefix + module + ".initModuleService()");
+        }
 
         MethodSpec.Builder initMethod = MethodSpec.methodBuilder("init")
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC);
-        initMethod.addStatement("initActivityDispatcher()");
-//                .addStatement("initModuleService()");
+        initMethod.addStatement("initActivityDispatcher()")
+                .addStatement("initModuleService()");
 
         return TypeSpec.classBuilder("RouterInit")
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                 .addMethod(initActivityDispatcherMethod.build())
-//                .addMethod(initModuleServiceMethod.build())
+                .addMethod(initModuleServiceMethod.build())
                 .addMethod(initMethod.build())
                 .build();
     }
 
 
-    private TypeSpec getRouterTableInitializer(Set<? extends Element> elements) throws ClassNotFoundException {
+    private TypeSpec getRouterTableInitializer(Set<? extends Element> elements,Set<? extends Element> moduleServiceElements) throws ClassNotFoundException {
         if (elements == null || elements.size() == 0) {
             return null;
         }
@@ -157,18 +160,19 @@ public class DispatcherProcessor extends AbstractProcessor {
             }
         }
 
-//        MethodSpec.Builder initMethod = MethodSpec.methodBuilder("initModuleService")
-//                .addModifiers(Modifier.PUBLIC, Modifier.STATIC);
-//        for (Element element : moduleServiceElements) {
-//            initMethod.addStatement("com.android.easyrouter.service.ModuleServiceManager.register(com.android.easyrouter.service.BaseModuleService.$T.class, new $T()) ",
-//                    ClassName.get((TypeElement) element), ClassName.get((TypeElement) element));
-//        }
+        MethodSpec.Builder initMethod = MethodSpec.methodBuilder("initModuleService")
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC);
+        for (Element element : moduleServiceElements) {
+            initMethod.addStatement(Constant.DISPATCHER_PACKAGE+".ModuleServiceManager.register("+Constant.DISPATCHER_PACKAGE+".BaseModuleService.$T.class, new $T()) ",
+                    ClassName.get((TypeElement) element), ClassName.get((TypeElement) element));
+        }
 
         TypeElement routerInitializerType = elementUtils.getTypeElement(Constant.DISPATCHER_PACKAGE+".IActivityInitMap");
         return TypeSpec.classBuilder(Constant.AutoCreateActivityMapPrefix + moduleName)
                 .addSuperinterface(ClassName.get(routerInitializerType))
                 .addModifiers(Modifier.PUBLIC)
                 .addMethod(routerInitBuilder.build())
+                .addMethod(initMethod.build())
                 .build();
     }
 

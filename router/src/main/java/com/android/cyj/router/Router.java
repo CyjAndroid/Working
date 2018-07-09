@@ -54,6 +54,10 @@ public class Router {
         }
     }
 
+    public <T extends IBaseModuleService> T getModuleService(Class<T> tClass) {
+        return ModuleServiceManager.getModuleService(tClass);
+    }
+
     public void inject(Object object) {
         if (object == null) {
             return;

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.widget.Toast;
 
+import com.android.cyj.router.BaseModuleService;
 import com.android.cyj.router.IInterceptor;
 import com.android.cyj.router.Router;
 import com.android.cyj.router.RouterBuild;
@@ -34,25 +35,28 @@ public class MainActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Router.getInstance()
-                .build("cyj://test")
-                .withString("name", "cyj")
-                .withInt("age", 18)
-                .withParcelable("obj",new News(1L,"a","b","c"))
-                .withSerializable("obj_test",new TestBean())
-                .addInterceptor(new IInterceptor() {
-                    @Override
-                    public boolean intercept(RouterBuild build) {
-                        return false;
-                    }
 
-                    @Override
-                    public void onIntercepted(RouterBuild build) {
-                        Toast.makeText(MainActivity.this,"拦截了",Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                })
-                .navigation();
+        Router.getInstance().getModuleService(BaseModuleService.ModuleInteractService.class).runModuleInteract(this);
+
+//        Router.getInstance()
+//                .build("cyj://test")
+//                .withString("name", "cyj")
+//                .withInt("age", 18)
+//                .withParcelable("obj",new News(1L,"a","b","c"))
+//                .withSerializable("obj_test",new TestBean())
+//                .addInterceptor(new IInterceptor() {
+//                    @Override
+//                    public boolean intercept(RouterBuild build) {
+//                        return false;
+//                    }
+//
+//                    @Override
+//                    public void onIntercepted(RouterBuild build) {
+//                        Toast.makeText(MainActivity.this,"拦截了",Toast.LENGTH_SHORT).show();
+//                        return;
+//                    }
+//                })
+//                .navigation();
 
         initViewPager();
         initTabLayout();

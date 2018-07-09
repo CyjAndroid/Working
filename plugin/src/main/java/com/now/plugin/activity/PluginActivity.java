@@ -14,11 +14,11 @@ import com.android.cyj.router.Router;
  */
 @Dispatcher("cyj://test")
 public class PluginActivity extends Activity {
-    @AutoAssign(name = "name")
+    @AutoAssign
     String name;
-    @AutoAssign(name = "age")
+    @AutoAssign
     int age;
-    @AutoAssign(name = "obj")
+    @AutoAssign
     Parcelable obj;
 
     @Override

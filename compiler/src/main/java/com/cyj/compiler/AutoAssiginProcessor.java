@@ -93,7 +93,8 @@ public class AutoAssiginProcessor extends AbstractProcessor {
                 TypeSpec.Builder helper = TypeSpec.classBuilder(fileName)
                         .addModifiers(Modifier.PUBLIC);
 
-                autoAssignMethodBuilder.addStatement("$T realObject = ($T)target", ClassName.get(parent), ClassName.get(parent));
+                autoAssignMethodBuilder.addStatement("$T realObject = ($T)target", ClassName.get(parent),
+                        ClassName.get(parent));
                 for (Element element : children) {
                     AutoAssign fieldConfig = element.getAnnotation(AutoAssign.class);
                     String fieldName = element.getSimpleName().toString();
@@ -101,7 +102,7 @@ public class AutoAssiginProcessor extends AbstractProcessor {
                     String statement = "realObject." + fieldName + " = realObject.";
                     statement += "getIntent().";
                     statement = buildStatement(originalValue, statement, paramTypeUtils.typeExchange(element), true);
-                    autoAssignMethodBuilder.addStatement(statement, fieldConfig.name());
+                    autoAssignMethodBuilder.addStatement(statement, fieldName);
                 }
                 helper.addMethod(autoAssignMethodBuilder.build());
                 try {

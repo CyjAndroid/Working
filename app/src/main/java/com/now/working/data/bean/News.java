@@ -1,5 +1,6 @@
 package com.now.working.data.bean;
 
+import android.content.Intent;
 import android.os.Parcel;
 import android.os.Parcelable;
 

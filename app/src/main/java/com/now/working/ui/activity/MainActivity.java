@@ -13,6 +13,7 @@ import com.android.cyj.router.Router;
 import com.android.cyj.router.RouterBuild;
 import com.now.working.R;
 import com.now.working.data.bean.News;
+import com.now.working.data.bean.TestBean;
 import com.now.working.ui.adapter.ViewPagerAdapter;
 import com.now.working.ui.base.BaseActivity;
 import com.now.working.ui.fragment.NewsFragment;
@@ -38,6 +39,7 @@ public class MainActivity extends BaseActivity {
                 .withString("name", "cyj")
                 .withInt("age", 18)
                 .withParcelable("obj",new News(1L,"a","b","c"))
+                .withSerializable("obj_test",new TestBean())
                 .addInterceptor(new IInterceptor() {
                     @Override
                     public boolean intercept(RouterBuild build) {

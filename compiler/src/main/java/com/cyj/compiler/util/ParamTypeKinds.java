@@ -17,5 +17,6 @@ public enum ParamTypeKinds {
     // Other type
     STRING,
     PARCELABLE,
+    SERIALIZABLE,
     OBJECT;
 }

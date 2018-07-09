@@ -62,6 +62,8 @@ public class ParamTypeUtils {
                 return ParamTypeKinds.STRING.ordinal();
             case PARCELABLE:
                 return ParamTypeKinds.PARCELABLE.ordinal();
+            case SERIALIZABLE:
+                return ParamTypeKinds.SERIALIZABLE.ordinal();
             default:
                 return ParamTypeKinds.OBJECT.ordinal();
         }

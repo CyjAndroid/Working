@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.annotation.Dispatcher;
 import com.now.working.R;
 import com.now.working.WorkApplication;
 import com.now.working.data.bean.News;
@@ -22,7 +23,7 @@ import java.util.List;
 /**
  * Created by Cyj on 17/12/17.
  */
-
+@Dispatcher("cyj://fragment")
 public class NewsFragment extends BaseFragment implements NewsDataView {
     private static final int RAW_COUNT = 6;
 

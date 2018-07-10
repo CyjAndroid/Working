@@ -1,5 +1,7 @@
 package com.android.cyj.router;
 
+import com.android.annotation.model.RouteMeta;
+
 import java.util.HashMap;
 
 /**
@@ -7,5 +9,5 @@ import java.util.HashMap;
  */
 
 public interface IActivityInitMap {
-    void initActivityMap(HashMap<String, Class> activityMap);
+    void initActivityMap(HashMap<String, RouteMeta> activityMap);
 }

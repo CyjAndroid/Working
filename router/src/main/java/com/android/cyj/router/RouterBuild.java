@@ -28,10 +28,11 @@ public class RouterBuild {
         setUrl(url);
     }
 
-    public void navigation() {
+    public Object navigation() {
         if (!TextUtils.isEmpty(mUrl)) {
-            Dispatcher.getActivityDispatcher().open(mApplication, mUrl, this);
+            return Dispatcher.getActivityDispatcher().open(mApplication, mUrl, this);
         }
+        return null;
     }
 
     public void setUrl(String url) {

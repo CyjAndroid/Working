@@ -3,6 +3,7 @@ package com.cyj.compiler;
 import com.android.annotation.Dispatcher;
 import com.android.annotation.DispatcherModules;
 import com.android.annotation.ModuleService;
+import com.android.annotation.model.RouteMeta;
 import com.google.auto.service.AutoService;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.MethodSpec;
@@ -28,7 +29,10 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
+import javax.lang.model.util.Types;
+import javax.tools.Diagnostic;
 
 import static com.squareup.javapoet.JavaFile.builder;
 
@@ -41,12 +45,16 @@ public class DispatcherProcessor extends AbstractProcessor {
     private Elements elementUtils;
     private String moduleName = "";
     private Set<String> set;
+    private Types types;
+
 
     @Override
     public synchronized void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
         mMessager = processingEnv.getMessager();
         mFiler = processingEnv.getFiler();
+        types = processingEnv.getTypeUtils();
+        mMessager = processingEnv.getMessager();
         elementUtils = processingEnv.getElementUtils();
         set = new HashSet<String>();
 
@@ -84,7 +92,7 @@ public class DispatcherProcessor extends AbstractProcessor {
         }
 
         try {
-            TypeSpec type = getRouterTableInitializer(elementDispatchers,elementModuleServices);
+            TypeSpec type = getRouterTableInitializer(elementDispatchers, elementModuleServices);
             if (type != null) {
                 builder(Constant.DISPATCHER_PACKAGE, type).build().writeTo(mFiler);
             }
@@ -107,7 +115,7 @@ public class DispatcherProcessor extends AbstractProcessor {
         MethodSpec.Builder initActivityDispatcherMethod = MethodSpec.methodBuilder("initActivityDispatcher")
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC);
         for (String module : moduleNames) {
-            initActivityDispatcherMethod.addStatement(Constant.DISPATCHER_PACKAGE+".Dispatcher.getActivityDispatcher().initActivityMaps(new " +
+            initActivityDispatcherMethod.addStatement(Constant.DISPATCHER_PACKAGE + ".Dispatcher.getActivityDispatcher().initActivityMaps(new " +
                     Constant.AutoCreateActivityMapPrefix + module + "())");
         }
 
@@ -131,14 +139,14 @@ public class DispatcherProcessor extends AbstractProcessor {
     }
 
 
-    private TypeSpec getRouterTableInitializer(Set<? extends Element> elements,Set<? extends Element> moduleServiceElements) throws ClassNotFoundException {
+    private TypeSpec getRouterTableInitializer(Set<? extends Element> elements, Set<? extends Element> moduleServiceElements) throws ClassNotFoundException {
         if (elements == null || elements.size() == 0) {
             return null;
         }
         //创建一个名为activityMap的HashMap对象
         ParameterizedTypeName mapTypeName = ParameterizedTypeName
                 .get(ClassName.get(HashMap.class), ClassName.get(String.class),
-                        ClassName.get(Class.class));
+                        ClassName.get(RouteMeta.class));
         ParameterSpec mapParameterSpec = ParameterSpec.builder(mapTypeName, "activityMap")
                 .build();
         //创建一个initActivityMap方法
@@ -146,28 +154,44 @@ public class DispatcherProcessor extends AbstractProcessor {
                 .addAnnotation(Override.class)
                 .addModifiers(Modifier.PUBLIC)
                 .addParameter(mapParameterSpec);
+
+        TypeMirror type_Activity = elementUtils.getTypeElement(RouteMeta.TYPE_ACTIVITY).asType();
+        TypeMirror type_Fragment = elementUtils.getTypeElement(RouteMeta.TYPE_FRAGMENT).asType();
+        TypeMirror type_FragmentV4 = elementUtils.getTypeElement(RouteMeta.TYPE_FRAGMENT_V4).asType();
+
         for (Element element : elements) {
+            TypeMirror tm = element.asType();
             if (element.getKind() != ElementKind.CLASS) {
             }
             Dispatcher router = element.getAnnotation(Dispatcher.class);
             String routerUrls = router.value();
-            if (routerUrls != null) {
-                routerInitBuilder.addStatement("activityMap.put($S, $T.class)", routerUrls, ClassName.get((TypeElement) element));
+            String type = null;
+            if (types.isSubtype(tm, type_Activity)) {
+                type = RouteMeta.TYPE_ACTIVITY;
+            } else if (types.isSubtype(tm, type_Fragment)) {
+                type = RouteMeta.TYPE_FRAGMENT;
+            } else if (types.isSubtype(tm, type_FragmentV4)) {
+                type = RouteMeta.TYPE_FRAGMENT_V4;
+            }
 
-//                for (String routerUrl : routerUrls) {
-//                    routerInitBuilder.addStatement("activityMap.put($S, $T.class)", routerUrl, ClassName.get((TypeElement) element));
-//                }
+            if (type != null) {
+                routerInitBuilder.addStatement("activityMap.put($S, $T.build($S,$S,$T.class))",
+                        routerUrls,
+                        ClassName.get(RouteMeta.class),
+                        routerUrls,
+                        type,
+                        ClassName.get((TypeElement) element));
             }
         }
 
         MethodSpec.Builder initMethod = MethodSpec.methodBuilder("initModuleService")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC);
         for (Element element : moduleServiceElements) {
-            initMethod.addStatement(Constant.DISPATCHER_PACKAGE+".ModuleServiceManager.register("+Constant.DISPATCHER_PACKAGE+".BaseModuleService.$T.class, new $T()) ",
+            initMethod.addStatement(Constant.DISPATCHER_PACKAGE + ".ModuleServiceManager.register(" + Constant.DISPATCHER_PACKAGE + ".BaseModuleService.$T.class, new $T()) ",
                     ClassName.get((TypeElement) element), ClassName.get((TypeElement) element));
         }
 
-        TypeElement routerInitializerType = elementUtils.getTypeElement(Constant.DISPATCHER_PACKAGE+".IActivityInitMap");
+        TypeElement routerInitializerType = elementUtils.getTypeElement(Constant.DISPATCHER_PACKAGE + ".IActivityInitMap");
         return TypeSpec.classBuilder(Constant.AutoCreateActivityMapPrefix + moduleName)
                 .addSuperinterface(ClassName.get(routerInitializerType))
                 .addModifiers(Modifier.PUBLIC)

@@ -1,10 +1,14 @@
 package com.android.cyj.router;
 
 import android.app.Application;
+import android.app.Fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.widget.Toast;
+
+import com.android.annotation.model.RouteMeta;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,7 +20,7 @@ import java.util.List;
 
 public class Dispatcher {
     private static Dispatcher mActivityDispatcher;
-    private HashMap<String, Class> mRealActivityMaps = new HashMap<String, Class>();// store the mapping of strings and class
+    private HashMap<String, RouteMeta> mRealActivityMaps = new HashMap<String, RouteMeta>();// store the mapping of strings and class
     public static List<String> mModuleNames = new ArrayList<String>();// store module names
     private static List<IInterceptor> mRealInterceptors = new ArrayList<IInterceptor>();// store the interceptor for UI Action
 
@@ -55,7 +59,7 @@ public class Dispatcher {
     }
 
 
-    public Class getTargetClass(String targetUrl) {
+    public RouteMeta getTargetClass(String targetUrl) {
         Uri targetUri = Uri.parse(targetUrl);
         String targetHost = targetUri.getHost();
         int pathSegmentSize = targetUri.getPathSegments().size();
@@ -81,7 +85,7 @@ public class Dispatcher {
         return null;
     }
 
-    public void open(Application mApplication, String url, RouterBuild build) {
+    public Object open(Application mApplication, String url, RouterBuild build) {
 
         List<IInterceptor> interceptors = new ArrayList<IInterceptor>();
         if (build.mInterceptors != null && !build.mInterceptors.isEmpty()) {
@@ -91,9 +95,28 @@ public class Dispatcher {
             }
         }
 
-        Intent intent = new Intent(mApplication, getTargetClass(url));
-        intent.putExtras(build.getBundle());
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        mApplication.startActivity(intent);
+        RouteMeta routeMeta = getTargetClass(url);
+        if (RouteMeta.TYPE_ACTIVITY.equals(routeMeta.getClassType())) {
+            Intent intent = new Intent(mApplication, routeMeta.getDestination());
+            intent.putExtras(build.getBundle());
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            mApplication.startActivity(intent);
+        } else if (RouteMeta.TYPE_FRAGMENT.equals(routeMeta.getClassType())
+                || RouteMeta.TYPE_FRAGMENT_V4.equals(routeMeta.getClassType())) {
+            Class fragmentMeta = routeMeta.getDestination();
+            try {
+                Object instance = fragmentMeta.getConstructor().newInstance();
+//                if (instance instanceof Fragment) {
+//                    ((Fragment) instance).setArguments(routeMeta.getExtras());
+//                } else if (instance instanceof android.support.v4.app.Fragment) {
+//                    ((android.support.v4.app.Fragment) instance).setArguments(postcard.getExtras());
+//                }
+                Toast.makeText(mApplication,"get Fragment!",Toast.LENGTH_SHORT).show();
+                return instance;
+            } catch (Exception ex) {
+            }
+        }
+
+        return null;
     }
 }

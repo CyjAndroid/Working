@@ -36,8 +36,8 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
 
-        Router.getInstance().getModuleService(BaseModuleService.ModuleInteractService.class).runModuleInteract(this);
-
+//        Router.getInstance().getModuleService(BaseModuleService.ModuleInteractService.class).runModuleInteract(this);
+        Router.getInstance().build("cyj://fragment").navigation();
 //        Router.getInstance()
 //                .build("cyj://test")
 //                .withString("name", "cyj")

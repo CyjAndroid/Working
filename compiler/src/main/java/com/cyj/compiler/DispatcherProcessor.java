@@ -158,6 +158,7 @@ public class DispatcherProcessor extends AbstractProcessor {
         TypeMirror type_Activity = elementUtils.getTypeElement(RouteMeta.TYPE_ACTIVITY).asType();
         TypeMirror type_Fragment = elementUtils.getTypeElement(RouteMeta.TYPE_FRAGMENT).asType();
         TypeMirror type_FragmentV4 = elementUtils.getTypeElement(RouteMeta.TYPE_FRAGMENT_V4).asType();
+        TypeMirror type_DegradeService = elementUtils.getTypeElement(RouteMeta.TYPE_DEGRADE_SEIVICE).asType();
 
         for (Element element : elements) {
             TypeMirror tm = element.asType();
@@ -172,6 +173,8 @@ public class DispatcherProcessor extends AbstractProcessor {
                 type = RouteMeta.TYPE_FRAGMENT;
             } else if (types.isSubtype(tm, type_FragmentV4)) {
                 type = RouteMeta.TYPE_FRAGMENT_V4;
+            } else if (types.isSubtype(tm, type_DegradeService)) {
+                type = RouteMeta.TYPE_DEGRADE_SEIVICE;
             }
 
             if (type != null) {

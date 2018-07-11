@@ -15,6 +15,7 @@ public class Router {
     private static volatile Router mRouter;
     public static Application mApplication;
     public static boolean isInited;
+    public static Class mGlobalDegradeService;
 
     private Router() {
     }
@@ -74,5 +75,9 @@ public class Router {
     public RouterBuild build(String url) {
         RouterBuild build = new RouterBuild(mApplication, url);
         return build;
+    }
+
+    public void setGlobalDegradeService(Class<? extends DegradeService> clazz){
+        mGlobalDegradeService = clazz;
     }
 }

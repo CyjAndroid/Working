@@ -7,6 +7,7 @@ import android.app.Application;
  */
 import com.android.annotation.DispatcherModules;
 import com.android.cyj.router.Router;
+import com.now.working.ui.service.PluginDegradeService;
 
 @DispatcherModules({"app","plugin"})
 
@@ -20,6 +21,7 @@ public class WorkApplication extends Application {
         mWorkApplication = this;
 
         Router.getInstance().init(this);
+        Router.getInstance().setGlobalDegradeService(PluginDegradeService.class);
     }
 
     public static WorkApplication getApplication() {

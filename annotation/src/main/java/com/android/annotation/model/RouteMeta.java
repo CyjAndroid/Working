@@ -9,6 +9,7 @@ public class RouteMeta {
     public static final String TYPE_ACTIVITY = "android.app.Activity";
     public static final String TYPE_FRAGMENT = "android.app.Fragment";
     public static final String TYPE_FRAGMENT_V4 = "android.support.v4.app.Fragment";
+    public static final String TYPE_DEGRADE_SEIVICE = "com.android.cyj.router.DegradeService";
 
     private String classType;
     private Class<?> destination;   // Destination

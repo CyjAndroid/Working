@@ -96,6 +96,18 @@ public class Dispatcher {
         }
 
         RouteMeta routeMeta = getTargetClass(url);
+        if (routeMeta == null && Router.mGlobalDegradeService != null) {
+            try {
+                DegradeService instance = (DegradeService) Router.mGlobalDegradeService.getConstructor().newInstance();
+                instance.doLost();
+                Toast.makeText(mApplication, "DegradeService doLost!", Toast.LENGTH_SHORT).show();
+                return instance;
+            } catch (Exception ex) {
+            }
+        }
+        if (routeMeta == null) {
+            return null;
+        }
         if (RouteMeta.TYPE_ACTIVITY.equals(routeMeta.getClassType())) {
             Intent intent = new Intent(mApplication, routeMeta.getDestination());
             intent.putExtras(build.getBundle());
@@ -111,7 +123,7 @@ public class Dispatcher {
 //                } else if (instance instanceof android.support.v4.app.Fragment) {
 //                    ((android.support.v4.app.Fragment) instance).setArguments(postcard.getExtras());
 //                }
-                Toast.makeText(mApplication,"get Fragment!",Toast.LENGTH_SHORT).show();
+                Toast.makeText(mApplication, "get Fragment!", Toast.LENGTH_SHORT).show();
                 return instance;
             } catch (Exception ex) {
             }

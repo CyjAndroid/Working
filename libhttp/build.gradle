@@ -49,4 +49,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
     annotationProcessor project(':compiler')
     compile project(":router")
+    compile project(":libservice")
 }

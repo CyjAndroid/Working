@@ -60,6 +60,7 @@ dependencies {
     compile project(path: ':plugin')
     annotationProcessor project(':compiler')
     compile project(":router")
+    compile project(":libservice")
 
     if(isBuildModule.toBoolean()){
 

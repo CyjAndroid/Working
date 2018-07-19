@@ -1,24 +1,22 @@
 package com.now.working.ui.activity;
 
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.widget.Toast;
-
-import com.android.cyj.router.BaseModuleService;
-import com.android.cyj.router.IInterceptor;
 import com.android.cyj.router.Router;
-import com.android.cyj.router.RouterBuild;
 import com.now.working.R;
-import com.now.working.data.bean.News;
-import com.now.working.data.bean.TestBean;
+import com.now.working.observer.MainActivityObserver;
 import com.now.working.ui.adapter.ViewPagerAdapter;
 import com.now.working.ui.base.BaseActivity;
 import com.now.working.ui.fragment.NewsFragment;
 import com.now.working.ui.fragment.TestFragment2;
+import com.now.working.ui.viewmodel.MainViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +33,14 @@ public class MainActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+//        testRouter();
+        initViewPager();
+        initTabLayout();
 
-//        Router.getInstance().getModuleService(BaseModuleService.ModuleInteractService.class).runModuleInteract(this);
+    }
+
+    private void testRouter() {
+        //        Router.getInstance().getModuleService(BaseModuleService.ModuleInteractService.class).runModuleInteract(this);
         Router.getInstance().build("cyj://plugin").navigation();
 //        Router.getInstance()
 //                .build("cyj://test")
@@ -57,10 +61,6 @@ public class MainActivity extends BaseActivity {
 //                    }
 //                })
 //                .navigation();
-
-        initViewPager();
-        initTabLayout();
-
     }
 
     private void initTabLayout() {

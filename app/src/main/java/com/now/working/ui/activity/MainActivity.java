@@ -1,6 +1,7 @@
 package com.now.working.ui.activity;
 
 
+import android.net.Uri;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -30,18 +31,23 @@ public class MainActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-        try {
-            WorkService service = WorkLoader.load(this, WorkService.class);
-            service.testService();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        notifyInfo();
+//        try {
+//            WorkService service = WorkLoader.load(this, WorkService.class);
+//            service.testService();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
 //        testRouter();
         initViewPager();
         initTabLayout();
 
+    }
+
+
+    private void notifyInfo(){
+        getContentResolver().notifyChange(Uri.parse("content://com.cyj.work/test"),null);
     }
 
     private void testRouter() {

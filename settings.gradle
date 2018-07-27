@@ -1,1 +1,1 @@
-include ':app', ':plugin', ':libhttp', ':annotation', ':router', ':compiler', ':libservice'
+include ':app', ':plugin', ':libhttp', ':annotation', ':router', ':compiler', ':libservice', ':workplugin'

@@ -32,12 +32,12 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         notifyInfo();
-//        try {
-//            WorkService service = WorkLoader.load(this, WorkService.class);
-//            service.testService();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        try {
+            WorkService service = WorkLoader.load(this, WorkService.class);
+            service.testService();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 //        testRouter();
         initViewPager();

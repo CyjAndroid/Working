@@ -3,8 +3,8 @@ apply plugin: 'org.greenrobot.greendao'
 apply plugin: 'com.work.plugin'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.2"
+    compileSdkVersion 27
+    buildToolsVersion "27.0.3"
     defaultConfig {
         applicationId "com.now.working"
         minSdkVersion 21
@@ -63,10 +63,10 @@ dependencies {
     compile project(":router")
     compile project(":libservice")
 
-    if(isBuildModule.toBoolean()){
-
-    }else {
-        compile project(':libhttp')
-    }
+//    if(isBuildModule.toBoolean()){
+//
+//    }else {
+//        compile project(':libhttp')
+//    }
 
 }
